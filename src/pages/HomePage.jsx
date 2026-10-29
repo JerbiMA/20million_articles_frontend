@@ -111,6 +111,17 @@ export default function HomePage() {
 
   const heroSlides = [
     {
+      id: 'season-26-27',
+      isGraphicBanner: true,
+      tag: '⭐ SAISON PROCHAINE 26/27',
+      title: 'MAILLOTS SAISON PROCHAINE 26/27',
+      desc: 'Découvrez en avant-première les maillots de la saison prochaine 26/27.',
+      link: '/catalog?category=new-season',
+      bannerImage: '/banners/hero-saison-26-27.jpg',
+    },
+    {
+      id: 'official-clubs',
+      isGraphicBanner: false,
       tag: '⚡ NOUVELLE COLLECTION 2024/2025',
       title: 'MAILLOTS OFFICIELS & ÉDITIONS CLUBS',
       desc: 'Real Madrid, FC Barcelone, Manchester City, Chelsea, Arsenal, PSG, Bayern, Sélections. Flocages officiels et livraison 24-48h partout en Tunisie.',
@@ -120,6 +131,8 @@ export default function HomePage() {
       bannerImage: '/banners/hero-soccer-jerseys.jpg',
     },
     {
+      id: 'retro-legends',
+      isGraphicBanner: false,
       tag: '🏆 LÉGENDES & VINTAGE 80s • 90s • 2000s',
       title: 'LES MAILLOTS DE LÉGENDE DE L\'HISTOIRE',
       desc: 'Revivez l\'histoire : Zidane 98, Ronaldo R9 98, Maradona 86, Maldini 2003, Del Piero 10, Beckham 7. Des pièces d\'archive intemporelles de collection.',
@@ -127,15 +140,6 @@ export default function HomePage() {
       cta: 'Explorer les Légendes',
       secondaryCta: 'Tous les Clubs',
       bannerImage: '/banners/hero-retro-jerseys.jpg',
-    },
-    {
-      tag: '⚽ ENSEMBLES JUNIOR & ENFANTS',
-      title: 'KITS FOOTBALL COMPLETS POUR ENFANTS',
-      desc: 'Ensembles maillot + short officiels pour jeunes champions de 4 à 14 ans. Tissu respirant, confort et flocages durables.',
-      link: '/catalog?search=kids',
-      cta: 'Découvrir les Kits Kids',
-      secondaryCta: 'Guide des Tailles',
-      bannerImage: '/banners/hero-kids-kits.jpg',
     },
   ];
 
@@ -290,121 +294,138 @@ export default function HomePage() {
           }}
         />
 
-        {/* Cinematic Sports Atmosphere Gradient: Keeps text punchy while showing jerseys & neon */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'linear-gradient(90deg, rgba(7, 9, 14, 0.94) 0%, rgba(7, 9, 14, 0.82) 42%, rgba(7, 9, 14, 0.4) 70%, rgba(7, 9, 14, 0.15) 100%)',
-          }}
-        />
-
-        {/* Content Container */}
-        <div className="container" style={{ position: 'relative', zIndex: 10, padding: '60px 20px' }}>
-          <div style={{ maxWidth: '640px' }}>
-            {/* Tag Badge */}
+        {/* If this is the Graphic Banner (banner.jpg), make it a direct clickable showcase */}
+        {heroSlides[currentSlide].isGraphicBanner ? (
+          <Link
+            to={heroSlides[currentSlide].link}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              zIndex: 10,
+              cursor: 'pointer',
+              textDecoration: 'none',
+            }}
+            aria-label="Commander Maillots Saison Prochaine 26/27"
+          />
+        ) : (
+          <>
+            {/* Cinematic Sports Atmosphere Gradient: Keeps text punchy while showing jerseys & neon */}
             <div
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '6px 14px',
-                borderRadius: '999px',
-                background: 'rgba(141, 0, 33, 0.45)',
-                border: '1px solid #facc15',
-                color: '#facc15',
-                fontSize: '0.82rem',
-                fontWeight: 900,
-                textTransform: 'uppercase',
-                letterSpacing: '0.8px',
-                marginBottom: '16px',
-                backdropFilter: 'blur(4px)',
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(90deg, rgba(7, 9, 14, 0.94) 0%, rgba(7, 9, 14, 0.82) 42%, rgba(7, 9, 14, 0.4) 70%, rgba(7, 9, 14, 0.15) 100%)',
               }}
-            >
-              <Flame size={15} /> {heroSlides[currentSlide].tag}
+            />
+
+            {/* Content Container */}
+            <div className="container" style={{ position: 'relative', zIndex: 10, padding: '60px 20px' }}>
+              <div style={{ maxWidth: '640px' }}>
+                {/* Tag Badge */}
+                <div
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '6px 14px',
+                    borderRadius: '999px',
+                    background: 'rgba(141, 0, 33, 0.45)',
+                    border: '1px solid #facc15',
+                    color: '#facc15',
+                    fontSize: '0.82rem',
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.8px',
+                    marginBottom: '16px',
+                    backdropFilter: 'blur(4px)',
+                  }}
+                >
+                  <Flame size={15} /> {heroSlides[currentSlide].tag}
+                </div>
+
+                {/* Main Headline */}
+                <h1
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: 'clamp(2.1rem, 4.2vw, 3.2rem)',
+                    fontWeight: 900,
+                    color: '#ffffff',
+                    lineHeight: 1.15,
+                    marginBottom: '16px',
+                    letterSpacing: '-0.5px',
+                    textTransform: 'uppercase',
+                    textShadow: '0 4px 20px rgba(0,0,0,0.7)',
+                  }}
+                >
+                  {heroSlides[currentSlide].title}
+                </h1>
+
+                {/* Description */}
+                <p
+                  style={{
+                    color: '#e2e8f0',
+                    fontSize: '1.05rem',
+                    lineHeight: 1.6,
+                    marginBottom: '28px',
+                    maxWidth: '560px',
+                    textShadow: '0 2px 10px rgba(0,0,0,0.8)',
+                  }}
+                >
+                  {heroSlides[currentSlide].desc}
+                </p>
+
+                {/* CTAs */}
+                <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
+                  <Link
+                    to={heroSlides[currentSlide].link}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      padding: '14px 32px',
+                      borderRadius: '999px',
+                      background: '#facc15',
+                      color: '#0a0d14',
+                      fontWeight: 900,
+                      fontSize: '0.98rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.6px',
+                      boxShadow: '0 8px 24px rgba(250, 204, 21, 0.4)',
+                      transition: 'all 0.2s',
+                      textDecoration: 'none',
+                    }}
+                    className="banner-cta-primary"
+                  >
+                    <span>{heroSlides[currentSlide].cta}</span>
+                    <ArrowRight size={18} />
+                  </Link>
+
+                  <Link
+                    to="/catalog?category=classical"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '14px 26px',
+                      borderRadius: '999px',
+                      background: 'rgba(255, 255, 255, 0.1)',
+                      color: '#ffffff',
+                      fontWeight: 700,
+                      fontSize: '0.94rem',
+                      border: '1px solid rgba(255, 255, 255, 0.3)',
+                      backdropFilter: 'blur(8px)',
+                      textDecoration: 'none',
+                      transition: 'all 0.2s',
+                    }}
+                    className="banner-cta-secondary"
+                  >
+                    <span>{heroSlides[currentSlide].secondaryCta || 'Maillots Rétro'}</span>
+                  </Link>
+                </div>
+              </div>
             </div>
-
-            {/* Main Headline */}
-            <h1
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(2.1rem, 4.2vw, 3.2rem)',
-                fontWeight: 900,
-                color: '#ffffff',
-                lineHeight: 1.15,
-                marginBottom: '16px',
-                letterSpacing: '-0.5px',
-                textTransform: 'uppercase',
-                textShadow: '0 4px 20px rgba(0,0,0,0.7)',
-              }}
-            >
-              {heroSlides[currentSlide].title}
-            </h1>
-
-            {/* Description */}
-            <p
-              style={{
-                color: '#e2e8f0',
-                fontSize: '1.05rem',
-                lineHeight: 1.6,
-                marginBottom: '28px',
-                maxWidth: '560px',
-                textShadow: '0 2px 10px rgba(0,0,0,0.8)',
-              }}
-            >
-              {heroSlides[currentSlide].desc}
-            </p>
-
-            {/* CTAs */}
-            <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
-              <Link
-                to={heroSlides[currentSlide].link}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  padding: '14px 32px',
-                  borderRadius: '999px',
-                  background: '#facc15',
-                  color: '#0a0d14',
-                  fontWeight: 900,
-                  fontSize: '0.98rem',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.6px',
-                  boxShadow: '0 8px 24px rgba(250, 204, 21, 0.4)',
-                  transition: 'all 0.2s',
-                  textDecoration: 'none',
-                }}
-                className="banner-cta-primary"
-              >
-                <span>{heroSlides[currentSlide].cta}</span>
-                <ArrowRight size={18} />
-              </Link>
-
-              <Link
-                to="/catalog?category=classical"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '14px 26px',
-                  borderRadius: '999px',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  color: '#ffffff',
-                  fontWeight: 700,
-                  fontSize: '0.94rem',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                  backdropFilter: 'blur(8px)',
-                  textDecoration: 'none',
-                  transition: 'all 0.2s',
-                }}
-                className="banner-cta-secondary"
-              >
-                <span>{heroSlides[currentSlide].secondaryCta || 'Maillots Rétro'}</span>
-              </Link>
-            </div>
-          </div>
-        </div>
+          </>
+        )}
 
         {/* Left & Right Slide Navigation Arrows */}
         <button
