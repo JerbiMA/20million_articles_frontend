@@ -94,26 +94,19 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="brand-logo" style={{ textDecoration: 'none' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div
+              <img
+                src="/icons/logo-2m.png"
+                alt="2Millions d'articles"
                 style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '10px',
-                  background: 'linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
                   border: '2px solid rgba(255,255,255,0.4)',
-                  color: '#8d0021',
-                  fontWeight: 900,
-                  fontSize: '1.2rem',
-                  letterSpacing: '-0.5px',
                   flexShrink: 0,
                 }}
-              >
-                2M
-              </div>
+              />
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.28rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.15 }}>
                   2Millions <span style={{ color: '#facc15' }}>d'articles</span>

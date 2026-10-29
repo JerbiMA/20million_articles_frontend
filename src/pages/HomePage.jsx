@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Flame, ChevronLeft, ChevronRight, Star, ArrowRight,
-  Sparkles, Award, Shield, Trophy
+  Sparkles, Award, Shield, Trophy, CheckCircle, Truck, Shirt
 } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import { productService, categoryService } from '../services/catalog';
@@ -20,6 +20,25 @@ import {
 } from '../components/SportsIcons';
 import { formatPrice, getProductImage, formatMoney } from '../utils/formatters';
 
+/* ──────────────── Fade-in on scroll hook ──────────────── */
+function useFadeInOnScroll() {
+  const ref = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
+      { threshold: 0.15 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return [ref, isVisible];
+}
+
 export default function HomePage() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [bestsellerProducts, setBestsellerProducts] = useState([]);
@@ -34,6 +53,11 @@ export default function HomePage() {
   const [bestsellerPage, setBestsellerPage] = useState(0);
 
   const [isHovered, setIsHovered] = useState(false);
+
+  // Fade-in refs for each section
+  const [storyRef, storyVisible] = useFadeInOnScroll();
+  const [circleRef, circleVisible] = useFadeInOnScroll();
+  const [productsRef, productsVisible] = useFadeInOnScroll();
 
   // The 10 Circular Collections with user's uploaded #8d0021 icons + matching sports vectors
   const circularItems = [
@@ -179,94 +203,6 @@ export default function HomePage() {
   return (
     <div>
       {/* =========================================================================
-          NOTRE HISTOIRE & MANIFESTE — DIRECTEMENT APRÈS LE HEADER
-          ========================================================================= */}
-      <section
-        className="brand-story-intro"
-        style={{
-          background: 'linear-gradient(135deg, #8d0021 0%, #6e001a 100%)',
-          color: '#ffffff',
-          padding: '28px 0',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.15)',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          <div
-            style={{
-              maxWidth: '980px',
-              margin: '0 auto',
-              textAlign: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '12px',
-            }}
-          >
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '4px 16px',
-                borderRadius: '999px',
-                background: 'rgba(255, 255, 255, 0.12)',
-                border: '1px solid rgba(250, 204, 21, 0.4)',
-                color: '#facc15',
-                fontSize: '0.78rem',
-                fontWeight: 800,
-                letterSpacing: '1px',
-                textTransform: 'uppercase',
-              }}
-            >
-              <span>⭐</span>
-              <span>DEPUIS 2017 • 2MILLIONS D'ARTICLES</span>
-            </div>
-
-            <p
-              style={{
-                fontSize: 'clamp(0.98rem, 1.8vw, 1.14rem)',
-                lineHeight: 1.7,
-                color: '#ffffff',
-                fontWeight: 500,
-                margin: 0,
-                letterSpacing: '0.2px',
-              }}
-            >
-              Since 2017, we’ve been more than just a football shirt shop , we’re a home for football lovers, passionate fans, and collectors. We believe every shirt tells a story. That’s why we offer a wide range of football shirts in all sizes, with quality you can trust. Whether you’re looking for your next favorite jersey or adding a special piece to your collection, you’re in the right place .
-            </p>
-
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '24px',
-                flexWrap: 'wrap',
-                marginTop: '4px',
-                fontSize: '0.82rem',
-                color: 'rgba(255, 255, 255, 0.9)',
-                fontWeight: 600,
-              }}
-            >
-              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ color: '#facc15' }}>✓</span> Toutes Tailles Disponibles
-              </span>
-              <span style={{ opacity: 0.4 }}>•</span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ color: '#facc15' }}>✓</span> Flocages & Écussons Authentiques
-              </span>
-              <span style={{ opacity: 0.4 }}>•</span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ color: '#facc15' }}>✓</span> Livraison Express 24h-48h en Tunisie
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
           1. HERO BANNER THÉMATIQUE FOOTBALL (Panoramique avec Maillots de Foot)
           ========================================================================= */}
       <section
@@ -309,7 +245,7 @@ export default function HomePage() {
           />
         ) : (
           <>
-            {/* Cinematic Sports Atmosphere Gradient: Keeps text punchy while showing jerseys & neon */}
+            {/* Cinematic Sports Atmosphere Gradient */}
             <div
               style={{
                 position: 'absolute',
@@ -323,6 +259,7 @@ export default function HomePage() {
               <div style={{ maxWidth: '640px' }}>
                 {/* Tag Badge */}
                 <div
+                  className="fade-in-up"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -510,9 +447,114 @@ export default function HomePage() {
       </section>
 
       {/* =========================================================================
+          NOTRE HISTOIRE & MANIFESTE — AFTER THE BANNER, WHITE BACKGROUND
+          ========================================================================= */}
+      <section
+        ref={storyRef}
+        className={`brand-story-section ${storyVisible ? 'fade-in-visible' : 'fade-in-hidden'}`}
+        style={{
+          background: '#ffffff',
+          padding: '56px 0 48px',
+          borderBottom: '1px solid #e2e8f0',
+        }}
+      >
+        <div className="container">
+          <div
+            style={{
+              maxWidth: '1080px',
+              margin: '0 auto',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '20px',
+            }}
+          >
+            {/* Subtle badge */}
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '6px 18px',
+                borderRadius: '999px',
+                background: 'rgba(141, 0, 33, 0.06)',
+                border: '1px solid rgba(141, 0, 33, 0.15)',
+                color: '#8d0021',
+                fontSize: '0.78rem',
+                fontWeight: 800,
+                letterSpacing: '1px',
+                textTransform: 'uppercase',
+              }}
+            >
+              <span>⭐</span>
+              <span>DEPUIS 2017 • 2MILLIONS D'ARTICLES</span>
+            </div>
+
+            {/* Main paragraph */}
+            <p
+              style={{
+                fontSize: 'clamp(0.98rem, 1.8vw, 1.12rem)',
+                lineHeight: 1.8,
+                color: '#334155',
+                fontWeight: 500,
+                margin: 0,
+                letterSpacing: '0.2px',
+                maxWidth: '800px',
+              }}
+            >
+              Since 2017, we've been more than just a football shirt shop — we're a home for football lovers, passionate fans, and collectors. We believe every shirt tells a story. That's why we offer a wide range of football shirts in all sizes, with quality you can trust. Whether you're looking for your next favorite jersey or adding a special piece to your collection, you're in the right place.
+            </p>
+
+            {/* Feature pills row */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '16px',
+                flexWrap: 'wrap',
+                marginTop: '8px',
+              }}
+            >
+              {[
+                { icon: <CheckCircle size={16} />, text: 'Toutes Tailles Disponibles' },
+                { icon: <Shield size={16} />, text: 'Flocages & Écussons Authentiques' },
+                { icon: <Truck size={16} />, text: 'Livraison Express 24h-48h' },
+              ].map((feat, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '8px 18px',
+                    borderRadius: '999px',
+                    background: '#f8fafc',
+                    border: '1px solid #e2e8f0',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    color: '#475569',
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  <span style={{ color: '#8d0021', display: 'flex' }}>{feat.icon}</span>
+                  {feat.text}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
           2. GRILLE DES 10 CERCLES AVEC ICÔNES ROUGES #8d0021
           ========================================================================= */}
-      <section className="circle-collections-section" style={{ background: '#ffffff', padding: '50px 0 40px' }}>
+      <section
+        ref={circleRef}
+        className={`circle-collections-section ${circleVisible ? 'fade-in-visible' : 'fade-in-hidden'}`}
+        style={{ background: '#ffffff', padding: '50px 0 40px' }}
+      >
         <div className="container">
           <div className="section-centered-title" style={{ textAlign: 'center', marginBottom: '36px' }}>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 900, color: '#0f172a', letterSpacing: '0.8px', textTransform: 'uppercase' }}>
@@ -521,10 +563,17 @@ export default function HomePage() {
           </div>
 
           <div className="circle-grid-10">
-            {circularItems.map((item) => {
+            {circularItems.map((item, index) => {
               const IconComponent = item.Icon;
               return (
-                <Link key={item.id} to={item.path} className="circle-collection-item">
+                <Link
+                  key={item.id}
+                  to={item.path}
+                  className="circle-collection-item"
+                  style={{
+                    animationDelay: `${index * 60}ms`,
+                  }}
+                >
                   <div className="circle-icon-badge">
                     {item.image ? (
                       <img
@@ -563,7 +612,11 @@ export default function HomePage() {
       {/* =========================================================================
           4. GRILLE DES NOUVEAUTÉS
           ========================================================================= */}
-      <section style={{ padding: '40px 0 80px', background: '#ffffff' }}>
+      <section
+        ref={productsRef}
+        className={`${productsVisible ? 'fade-in-visible' : 'fade-in-hidden'}`}
+        style={{ padding: '40px 0 80px', background: '#ffffff' }}
+      >
         <div className="container">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
             <div>
